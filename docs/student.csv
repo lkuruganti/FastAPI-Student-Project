@@ -1,0 +1,10 @@
+Grade,Pgroup,Group,Subject,Total students,Buffer,Virtual class/Physical,Student,Marks,Location
+G12,BPC,Biology,Biology1,32,98834740,TRUE,S1,70,Pune
+G13,,,,,,,S2,,
+,MPC,Math ,Math2,35,592804308,FALSE,S3,76,Banglore
+G14,,,,,,,S4,,
+,bpc,Physics,Physics2,40,527827876,TRUE,S5,90,Chennai
+,,,,,,,S7,,
+G18,MPC,History,History1,60,32779808,FALSE,S13,80,Jalgaon
+G18,MPC,History,History1,,32779808,FALSE,S12,80,Jalgaon
+G18,MPC,History,History1,,32779808,FALSE,S11,80,Jalgaon
