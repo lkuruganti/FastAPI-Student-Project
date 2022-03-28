@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+    <title>Upload CSV data to Database</title>
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+          ['Chennai', 'Hours per Day'],
+          {% for i in chart_analysis %}
+            ['{{ i["location_name"] }}',     {{ i.student_count }}],
+          {% endfor %}
+        ]);
+
+        var options = {
+          title: 'Location Wise Student Analysis'
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+        chart.draw(data, options);
+      }
+    </script>
+
+  </head>
+  <style type="text/css">
+   body { 
+    background: darkgray; !important; 
+  }
+  </style>
+
+
+  <body>
+    <div class="container-fluid">
+      <div class="row d-flex">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+          <a class="navbar-brand" href="#">CSV to Database</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+        
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+              <li class="nav-item active">
+                <a class="nav-link" href="http://127.0.0.1:8000/v1/">Home</a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+    </div>
+  
+    <div class="container justify-content-center">
+      <div class="row text-center mt-4 mb-4">
+        {% if result %}
+          <div class="col">
+            <div class="alert alert-primary" role="{{ result.alert }}">
+              {{ result.msg }}
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+
+
+    <div class="container justify-content-center">
+        <div class="row mt-4 mb-4 justify-content-center">
+            <div class="card">
+
+            </div>
+            <div class="col-sm text-center shadow p-3 mb-5 bg-white rounded">
+                <h4>Upload CSV File</h4>
+            
+                <form action="http://127.0.0.1:8000/v1/" enctype="multipart/form-data" method="post">
+                        <span class="btn p-2 mt-4 mb-4">    
+                            <input class="btn btn-outline-success" type="file" name="csv_file" required>
+                        </span>
+                        <br>
+                        <button type="submit" class="btn btn-outline-primary p-2 m-2">
+                            <span>Start upload</span>
+                        </button>
+                        <button type="reset" class="btn btn-primary p-2 m-2">
+                            <span>Cancel upload</span>
+                        </button>
+    
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="row justify-content-center shadow p-3 mb-5 bg-white rounded">
+            <h4 class="p-4 m-2">Student Details</h4>
+            <div class="col ">
+              {% if students %}
+                <table class="table border">
+                    <thead class="thead-dark">
+                      <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Grade</th>
+                        <th scope="col">Pgroup</th>
+                        <th scope="col">Group</th>
+                        <th scope="col">Subject</th>
+                        <th scope="col">Total students</th>
+                        <th scope="col">Buffer</th>
+                        <th scope="col">Virtual class/Physical</th>
+                        <th scope="col">Student</th>
+                        <th scope="col">Marks</th>
+                        <th scope="col">Location</th>
+
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for student in students %}  
+                      <tr>
+                        <th scope="row">{{ student.id }}</th>
+                        <td>{{ student.grade }}</td>
+                        <td>{{ student.pgroup }}</td>
+                        <td>{{ student.group }}</td>
+                        <td>{{ student.subject }}</td>
+                        <td>{{ student.total_students }}</td>
+                        <td>{{ student.buffer_size }}</td>
+                        <td>{{ student.is_physical }}</td>
+                        <td>{{ student.student }}</td>
+                        <td>{{ student.marks }}</td>
+                        <td>{{ student.location }}</td>
+                        
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+
+                {% else %}
+                
+                  <h4> No student Data not Found.</h4>
+
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="row justify-content-center shadow p-3 mb-5 bg-white rounded">
+          <div class="col">
+            <div id="piechart" style="width: 900px; height: 500px;"></div>
+          </div>
+          
+        </div>
+    </div>
+    
+    
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
+   
+  </body>
+</html>
